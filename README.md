@@ -1,4 +1,4 @@
-# TimeSeriesForecastingHackathon
+# Time-Series Forecasting
 
 This project is a comprehensive time series forecasting application built using Python and Flask. It utilizes various statistical models like ARIMA and SARIMA to predict temperature trends. The application includes a web interface to visualize and forecast temperature data.
 
@@ -38,3 +38,7 @@ The application is deployed on Render and can be accessed at:
 ## Contributing
 
 Contributions are welcome. Please submit a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
