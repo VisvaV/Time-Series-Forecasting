@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Series Forecasting</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background: linear-gradient(to right, #141E30, #243B55);
+            color: white;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 10px rgba(0, 255, 255, 0.6);
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 16px;
+            max-width: 600px;
+            margin: auto;
+            color: #ddd;
+        }
+        form {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.5);
+            color: black;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        select, input, button {
+            padding: 10px;
+            margin: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+        select, input {
+            background: #f9f9f9;
+        }
+        button {
+            background: linear-gradient(to right, #ff7f50, #ff4500);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff4500, #ff0000);
+        }
+        .forecast-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.5);
+            color: black;
+            max-width: 600px;
+        }
+        img {
+            margin-top: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Time Series Forecasting</h2>
+    <p>Analyze historical weather patterns and predict future trends using time series forecasting models.</p>
+
+    <form id="forecastForm" action="/forecast" method="POST">
+        <label for="category">Select Type:</label>
+        <select name="category" id="category" required>
+            <option value="country">Country</option>
+            <option value="location_name">Location</option>
+        </select>
+
+        <label for="selected_value">Select Value:</label>
+        <select name="selected_value" id="selected_value" required>
+            <option value="">--Select an option--</option>
+        </select>
+
+        <label for="period">Forecast Period (Days):</label>
+        <input type="number" name="period" id="period" min="1" required>
+
+        <button type="submit">Generate Forecast</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            function updateDropdown() {
+                var selectedType = $("#category").val();
+                $.ajax({
+                    url: "/get_options",
+                    type: "GET",
+                    data: { type: selectedType },
+                    success: function(data) {
+                        $("#selected_value").empty();
+                        if (data.options.length > 0) {
+                            $("#selected_value").append('<option value="">--Select ' + selectedType.charAt(0).toUpperCase() + selectedType.slice(1) + '--</option>');
+                            data.options.forEach(function(option) {
+                                $("#selected_value").append('<option value="' + option + '">' + option + '</option>');
+                            });
+                        } else {
+                            $("#selected_value").append('<option value="">No options available</option>');
+                        }
+                    },
+                    error: function() {
+                        alert("Error fetching options. Please try again.");
+                    }
+                });
+            }
+
+            $("#category").change(updateDropdown);
+            updateDropdown();  
+        });
+    </script>
+
+</body>
+</html>
