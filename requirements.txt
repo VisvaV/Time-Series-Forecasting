@@ -5,4 +5,5 @@ matplotlib==3.7.1
 seaborn==0.13.2
 scikit-learn==1.2.2
 statsmodels==0.14.0
-gunicorn
+gunicorn==20.1.0
+werkzeug==2.2.3
