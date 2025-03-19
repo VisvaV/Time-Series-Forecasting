@@ -45,99 +45,84 @@
             display: block;
             margin-top: 10px;
         }
-        select, input, button {
+        select, input[type="number"], button {
             padding: 10px;
-            margin: 10px;
-            width: 100%;
+            margin-bottom: 15px;
+            width: calc(100% - 20px); /* Adjusted width to fit within container */
             border-radius: 5px;
             border: 1px solid #ddd;
             font-size: 16px;
         }
+        input[type="number"] {
+            width: 80%; /* Adjusted width to make it smaller */
+        }
         select, input {
-            background: #f9f9f9;
+            background-color: #f9f9f9;
         }
         button {
-            background: linear-gradient(to right, #ff7f50, #ff4500);
+            background-color: orange;
             color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: 0.3s;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: large;
         }
         button:hover {
-            background: linear-gradient(to right, #ff4500, #ff0000);
-        }
-        .forecast-container {
-            margin-top: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.5);
-            color: black;
-            max-width: 600px;
-        }
-        img {
-            margin-top: 20px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            width: 90%;
+            background-color: darkorange;
         }
     </style>
 </head>
 <body>
 
-    <h2>Time Series Forecasting</h2>
-    <p>Analyze historical weather patterns and predict future trends using time series forecasting models.</p>
+<h2>Time Series Forecasting</h2>
+<p>Analyze historical weather patterns and predict future trends using time series forecasting models.</p>
 
-    <form id="forecastForm" action="/forecast" method="POST">
-        <label for="category">Select Type:</label>
-        <select name="category" id="category" required>
-            <option value="country">Country</option>
-            <option value="location_name">Location</option>
-        </select>
+<form id="forecastForm" action="/forecast" method="POST">
+    <label for="category">Select Type:</label>
+    <select name="category" id="category" required>
+        <option value="country">Country</option>
+        <option value="location_name">Location</option>
+    </select>
 
-        <label for="selected_value">Select Value:</label>
-        <select name="selected_value" id="selected_value" required>
-            <option value="">--Select an option--</option>
-        </select>
+    <label for="selected_value">Select Value:</label>
+    <select name="selected_value" id="selected_value" required>
+        <option value="">--Select an option--</option>
+    </select>
 
-        <label for="period">Forecast Period (Days):</label>
-        <input type="number" name="period" id="period" min="1" required>
+    <label for="period">Forecast Period (Days):</label>
+    <input type="number" name="period" id="period" min="1" required>
 
-        <button type="submit">Generate Forecast</button>
-    </form>
+    <button type="submit">Generate Forecast</button>
+</form>
 
-    <script>
-        $(document).ready(function() {
-            function updateDropdown() {
-                var selectedType = $("#category").val();
-                $.ajax({
-                    url: "/get_options",
-                    type: "GET",
-                    data: { type: selectedType },
-                    success: function(data) {
-                        $("#selected_value").empty();
-                        if (data.options.length > 0) {
-                            $("#selected_value").append('<option value="">--Select ' + selectedType.charAt(0).toUpperCase() + selectedType.slice(1) + '--</option>');
-                            data.options.forEach(function(option) {
-                                $("#selected_value").append('<option value="' + option + '">' + option + '</option>');
-                            });
-                        } else {
-                            $("#selected_value").append('<option value="">No options available</option>');
-                        }
-                    },
-                    error: function() {
-                        alert("Error fetching options. Please try again.");
+<script>
+    $(document).ready(function() {
+        function updateDropdown() {
+            var selectedType = $("#category").val();
+            $.ajax({
+                url: "/get_options",
+                type: "GET",
+                data: { type: selectedType },
+                success: function(data) {
+                    $("#selected_value").empty();
+                    if (data.options.length > 0) {
+                        $("#selected_value").append('<option value="">--Select ' + selectedType.charAt(0).toUpperCase() + selectedType.slice(1) + '--</option>');
+                        data.options.forEach(function(option) {
+                            $("#selected_value").append('<option value="' + option + '">' + option + '</option>');
+                        });
+                    } else {
+                        $("#selected_value").append('<option value="">No options available</option>');
                     }
-                });
-            }
+                },
+                error: function() {
+                    alert("Error fetching options. Please try again.");
+                }
+            });
+        }
 
-            $("#category").change(updateDropdown);
-            updateDropdown();  
-        });
-    </script>
+        $("#category").change(updateDropdown);
+        updateDropdown();
+    });
+</script>
 
 </body>
 </html>
