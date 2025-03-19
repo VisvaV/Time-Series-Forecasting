@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: time-series-forecasting
+    env: python
+    runtime:
+      version: 3.10
+    build:
+      command: pip install -r requirements.txt
+    start:
+      command: gunicorn app:app --bind 0.0.0.0:8000
+    envVars:
+      - key: FLASK_APP
+        value: app.py
+      - key: FLASK_ENV
+        value: production
+    region: oregon
+    plan: free
+    healthCheck:
+      path: /
+      port: 8000
